@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """
-Simple helper function to calculate pagination index range.
+Simple pagination helper and Server class to paginate a database
+of popular baby names.
 """
-
-from typing import List
+import csv
+from typing import List, Tuple
 
 
 def index_range(page: int, page_size: int) -> Tuple[int, int]:
     """
-        Retrieve the start and end indexes corresponding to the range of
-        indexes to return in a list for particular pagination parameters.
+    Retrieve the start and end indexes corresponding to the range of
+    indexes to return in a list for particular pagination parameters.
     """
     start_index = (page - 1) * page_size
     end_index = page * page_size
@@ -17,12 +18,14 @@ def index_range(page: int, page_size: int) -> Tuple[int, int]:
 
 
 class Server:
-    """
-    Server class to paginate a database of popular baby names.
+    """Server class to paginate a database of popular baby names.
     """
     DATA_FILE = "Popular_Baby_Names.csv"
 
     def __init__(self):
+        """
+        Initialize the server instance with an empty cached dataset.
+        """
         self.__dataset = None
 
     def dataset(self) -> List[List]:
@@ -44,8 +47,7 @@ class Server:
         assert isinstance(page_size, int) and page_size > 0
 
         start, end = index_range(page, page_size)
-
-        dataset = self.dataset()
+        data = self.dataset()
 
         if start >= len(data):
             return []
